@@ -1,6 +1,6 @@
 from app.core.db import db
 from flask_security import UserMixin, RoleMixin
-import datetime
+from datetime import datetime
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
