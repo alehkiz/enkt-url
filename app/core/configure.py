@@ -12,6 +12,7 @@ login.login_message_category = 'danger'
 def init(app:Flask):
     security.init_app(app, datastore=user_datastore, register_blueprint=False)
     db.init_app(app)
+    migrate.init_app(app)
     csrf.init_app(app)
     login.init_app(app)
     login.session_protection = 'strong'
