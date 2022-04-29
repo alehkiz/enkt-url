@@ -30,14 +30,17 @@ class BaseConfig(object):
 
     BABEL_DEFAULT_LOCALE = 'pt_BR'
 
-    _SQLALCHEMY_DATABASE_NAME_PROD = environ.get('DATABASE_PROD', False) or PROJECT_NAME.lower() + "-prod"
-    _SQLALCHEMY_DATABASE_NAME_TEST = environ.get('DATABASE_TEST', False) or PROJECT_NAME.lower() + '-test'
-    _SQLALCHEMY_DATABASE_NAME_DEV = environ.get('DATABASE_DEV', False) or PROJECT_NAME.lower() + '-dev'
+    _SQLALCHEMY_DATABASE_NAME_PROD = environ.get('DATABASE_PROD', False) or PROJECT_NAME.lower() + "_prod"
+    _SQLALCHEMY_DATABASE_NAME_TEST = environ.get('DATABASE_TEST', False) or PROJECT_NAME.lower() + '_test'
+    _SQLALCHEMY_DATABASE_NAME_DEV = environ.get('DATABASE_DEV', False) or PROJECT_NAME.lower() + '_dev'
 
     _SQLALCHEMY_DATABASE_HOST = environ.get('DB_HOST')
     _SQLALCHEMY_DATABASE_USERNAME = environ.get('DB_USER')
     _SQLALCHEMY_DATABASE_PASSWORD = environ.get('DB_PASS')
     _SQLALCHEMY_DATABASE_PORT = environ.get('DB_PORT')
+
+    _URL_SHORT_SIZE = 32
+    _URL_MAX_SIZE = 1024
 
 
 class DevelopmentConfig(BaseConfig):

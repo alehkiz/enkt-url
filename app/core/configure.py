@@ -3,7 +3,10 @@ from flask.cli import with_appcontext
 from app.core.extensions import security, migrate, csrf, login
 from app.core.db import user_datastore, db
 from app.blueprints import register_blueprints
-from app.models.security import User
+from app.models.security import User, Role
+from app.models.url import URL, Custom_URL
+from app.models.network import Network
+
 
 login.login_view = 'auth.login'
 login.login_message = 'Faça login para acessar a página'
@@ -28,3 +31,12 @@ def init(app:Flask):
             app.logger.error(e)
             return None
         return user
+
+    
+    @app.shell_context_processor
+    @with_appcontext
+    def make_shell_context():
+        app.config['SERVER_NAME'] = 'localhost'
+        ctx = app.test_request_context()
+        ctx.push()
+        return dict(db=db, User=User, Role=Role, URL=URL, Custom_URL=Custom_URL, Network=Network)

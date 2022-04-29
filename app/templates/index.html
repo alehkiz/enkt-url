@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% import 'macros/form.html' as macros %}
+
+{% block content %}
+    <h1 class="text-center mb-3">{% block title %} Encurtador de URL {% endblock %}</h1>
+    <div class="row">
+        <div class="'col-md-2"></div>
+        <div class="col-md-8">
+            <form action="" method="post">
+                {{ form.csrf_token }} 
+                {{ macros.render_field(form.url, size=64, class='form-control', placeholder='Insira a URL', maxlength=512) }}
+                <br>
+                {{ form.submit(class='btn btn-primary mb-3') }}
+            </form>
+        </div>
+    </div>
+{% endblock %}
