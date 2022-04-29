@@ -2,39 +2,58 @@ from app.core.db import  db
 from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from flask import current_app as app
+from flask import current_app as app, request
 
 from app.utils.kernel import generate_random_string
 
 class URL(db.Model):
     __tablename__ = 'url'
     id = db.Column(db.Integer(), primary_key=True)
-    url = db.Column(db.Text(), nullable=False, unique=False)
+    _url = db.Column(db.Text(), nullable=False, unique=False)
     _url_short = db.Column(db.String(32), nullable=False, unique=True)
     # _url_custom = db.Column(db.String(64), nullable=True, unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_on = db.Column(db.Boolean)
     url_network_id = db.Column(db.Integer, db.ForeignKey('network.id'), nullable=False)
-    # custom_url = db.relationship('Custom_URL', back_populates="art")
+    hits = db.Column(db.Integer, default=0)
     custom_url = db.relationship('Custom_URL', cascade='all, delete-orphan',
                             single_parent=True, backref='page', lazy='dynamic', primaryjoin='URL.id == Custom_URL.url_id')
-
+    
 
     def __repr__(self) -> str:
         return f'URL(id:{self.id}, short:{self._url_short}'
+
+    def get_url(self)-> str:
+        return request.url_root + self.url_short
     
+    @hybrid_property
+    def url(self):
+        return self._url
+
+    @url.setter
+    def url(self, url):
+        q_url = URL.query.filter(URL.url == url).first()
+        if q_url != None:
+            self._url = False
+        else:
+            self._url = url
+
+
     @hybrid_property
     def url_short(self):
         return self._url_short
 
     @url_short.setter
     def url_short(self, url_short):
-
         q_url = URL.query.filter(URL.url_short == url_short).first()
-        while q_url != None:
-            url_short = generate_random_string(app.config['_URL_SHORT_SIZE'])
-            q_url = URL.query.filter(URL.url_short == url_short).first()
-        self._url_short = url_short
+        if q_url != None:
+            self._url_short = False
+        else:
+            self._url_short = url_short
+        # while q_url != None:
+        #     url_short = generate_random_string(app.config['_URL_SHORT_SIZE'])
+        #     q_url = URL.query.filter(URL.url_short == url_short).first()
+        # self._url_short = url_short
 
 class Custom_URL(db.Model):
     __tablename__ = 'custom_url'

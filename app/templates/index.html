@@ -2,16 +2,51 @@
 {% import 'macros/form.html' as macros %}
 
 {% block content %}
-    <h1 class="text-center mb-3">{% block title %} Encurtador de URL {% endblock %}</h1>
+    <h1 class="text-center mb-3 text-uppercase">{% block title %} Encurtador de URL {% endblock %}</h1>
+    <hr>
+    
     <div class="row">
-        <div class="'col-md-2"></div>
-        <div class="col-md-8">
+        <div class="row row-cols-2 m-2">
+            <div class="col d-grid gap-2"><a class="btn btn-primary btn-lg" href="{{url_for('main.index')}}" role="button">Incluir</a></div>
+            <div class="col d-grid gap-2"><a class="btn btn-success btn-lg" href="{{url_for('main.list')}}" role="button">Listar</a></div>
+        </div>
+
+
+        <div class="row">
+            {% if form is defined %}
             <form action="" method="post">
                 {{ form.csrf_token }} 
                 {{ macros.render_field(form.url, size=64, class='form-control', placeholder='Insira a URL', maxlength=512) }}
                 <br>
                 {{ form.submit(class='btn btn-primary mb-3') }}
             </form>
+            {% elif status is defined %}
+            <!-- <div class="row m-2"> -->
+                <div class="alert alert-success" role="alert">Criado com sucesso </div>
+                <div class="input-group">
+                <input class="form-control" type="text" aria-label="URL" value="{{url}}" id='short-url' disabled>
+                <span class="input-group-btn">
+                    <button class="btn btn-outline-dark" type="button" id="copy-button"
+                    data-bs-toggle="tooltip" title="Copiar" >{#onclick="copyValue()"#}
+                      Copiar
+                    </button>
+                  </span>
+                </div>
+            {% endif %}
         </div>
     </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="..." class="rounded me-2" alt="...">
+            <strong class="me-auto">Aviso</strong>
+            <!-- <small>11 mins ago</small> -->
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            URL copiada
+          </div>
+        </div>
+      </div>
 {% endblock %}

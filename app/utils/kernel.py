@@ -14,13 +14,13 @@ def generate_random_string(length : int) -> str:
     return ''.join(choice(string.ascii_letters+string.digits+'+-_.') for _ in range(length))
     
 
+
 def validate_url(url: str):
     parsed = urlparse(url)
     if all([parsed.scheme, parsed.netloc]):
         return parsed
-    raise Exception('Url inválida')
+    return False
 
 def url_exist(url: str):
     session = requests.Session()
-    r = session.head(url, allow_redirects=True)
-    return r
+    return session.head(url, allow_redirects=True)

@@ -4,8 +4,8 @@ from os import environ
 import app
 
 class BaseConfig(object):
-    PROJECT_NAME = 'M83'
-    SITE_TITLE = environ.get('PROJECT_NAME') or 'Encurtador de URL'
+    PROJECT_NAME = 'enkt_url'
+    SITE_TITLE = 'Encurtador de URL'#environ.get('PROJECT_NAME') or
     SECRET_KEY = environ.get('SERVER_KEY')
     APP_DIR = abspath(dirname(app.__file__))
     BASE_DIR = abspath(join(APP_DIR, '..'))
@@ -39,7 +39,7 @@ class BaseConfig(object):
     _SQLALCHEMY_DATABASE_PASSWORD = environ.get('DB_PASS')
     _SQLALCHEMY_DATABASE_PORT = environ.get('DB_PORT')
 
-    _URL_SHORT_SIZE = 32
+    _URL_SHORT_SIZE = 10
     _URL_MAX_SIZE = 1024
 
 
