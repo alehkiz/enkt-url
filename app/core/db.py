@@ -5,6 +5,7 @@ import click
 
 db = SQLAlchemy(session_options={'autoflush': True})
 
+
 from app.models.security import User, Role
 
 user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)

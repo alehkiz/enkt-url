@@ -7,15 +7,35 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 })
 
 window.onload = function(){
-
     var buttonCopy = document.getElementById("copy-button");
     var toastLiveExample = document.getElementById('liveToast')
+    var toast = new bootstrap.Toast(toastLiveExample)
+    if (buttonCopy !== null) {
+        buttonCopy.addEventListener('click', function () {
+            var copyText = document.getElementById("short-url");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            toast.show()
+        })
+    }
 
-    buttonCopy.addEventListener('click', function () {
-        var toast = new bootstrap.Toast(toastLiveExample)
-    
-        toast.show()
-      })
+    var elmCopy = document.getElementsByClassName('table-copy')
+    for (var i = 0; i < elmCopy.length; i++){
+        var id = elmCopy[i].id.split('copy-')[0]
+        var elm = document.getElementById('copy-value-' + id)
+        elmCopy[i].addEventListener('click', function(){
+            console.log(this)
+            console.log(this.id.split('copy-')[0])
+            var id = this.id.split('copy-')[0]
+            var elm = document.getElementById('copy-value-' + id)
+            console.log(elm)
+            // elm.select();
+            // elm.setSelectionRange(0, 999999);
+            navigator.clipboard.writeText(elm.href);
+            toast.show()
+        })
+    }
 }
 
 // function copyValue() {

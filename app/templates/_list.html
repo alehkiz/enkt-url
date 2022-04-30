@@ -1,0 +1,34 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th scope="col">URL Nova</th>
+            <th scope="col">URL Antiga</th>
+            <th scope="col">Status</th>
+            <th scope="col">Acessos</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for url in list.items %}
+        <tr class="{{ 'table-danger' if url.status is false else '' }}">
+            <td>{{url.id}}</td>
+            <td>
+                {% if url.status is true %}
+                <a href='{{url.get_short_url()}}' id='copy-value-{{url.url_short}}' target="_blank" class="link-secondary">{{url.get_short_url()}}</a>
+                <a href="#" class="float-end table-copy" type="button" id="copy-{{url.url_short}}" data-bs-toggle="tooltip"
+                title="Copiar">
+                    <i class="bi bi-clipboard2 float-end"></i>
+                </a>
+                {% else %}
+                {{url.get_short_url()}}
+                {% endif %}
+            </td>
+            <td>{{url.url}}</td>
+            <td>{% if url.status is true %}<i class="bi bi-check-square-fill text-success"></i>{% else %}
+                <i class="bi bi-x-square-fill text-danger"></i>{% endif %}
+            </td>
+            <td>{{url.hits}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

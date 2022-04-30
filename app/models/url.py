@@ -1,7 +1,12 @@
+from email.policy import default
 from app.core.db import  db
 from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
+import validators
 
+
+from app.utils.kernel import url_exist
+from app.utils.db import commit
 from flask import current_app as app, request
 
 from app.utils.kernel import generate_random_string
@@ -13,7 +18,7 @@ class URL(db.Model):
     _url_short = db.Column(db.String(32), nullable=False, unique=True)
     # _url_custom = db.Column(db.String(64), nullable=True, unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    is_on = db.Column(db.Boolean)
+    status = db.Column(db.Boolean, default=True)
     url_network_id = db.Column(db.Integer, db.ForeignKey('network.id'), nullable=False)
     hits = db.Column(db.Integer, default=0)
     custom_url = db.relationship('Custom_URL', cascade='all, delete-orphan',
@@ -21,22 +26,32 @@ class URL(db.Model):
     
 
     def __repr__(self) -> str:
-        return f'URL(id:{self.id}, short:{self._url_short}'
+        return f'URL(id:{self.id}, short:{self._url_short})'
 
-    def get_url(self)-> str:
+    def get_short_url(self)-> str:
         return request.url_root + self.url_short
-    
+
+    def check_status_url(self):
+        url = url_exist(self.url)
+        if url.status_code == 200:
+            self.status = True
+            status = True
+        else:
+            self.status = False
+            status = False
+        commit()
+        return status
+
     @hybrid_property
     def url(self):
         return self._url
 
     @url.setter
     def url(self, url):
-        q_url = URL.query.filter(URL.url == url).first()
-        if q_url != None:
-            self._url = False
-        else:
+        if validators.url(url) is True:
             self._url = url
+        else:
+            self._url = None
 
 
     @hybrid_property

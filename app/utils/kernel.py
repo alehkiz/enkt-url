@@ -11,7 +11,7 @@ def generate_random_string(length : int) -> str:
     Returns:
         str: Generated string
     """    
-    return ''.join(choice(string.ascii_letters+string.digits+'+-_.') for _ in range(length))
+    return ''.join(choice(string.ascii_letters+string.digits+'+_.') for _ in range(length))
     
 
 
