@@ -52,10 +52,9 @@ def index():
 @bp.route('/<short>')
 def short(short):
     url = URL.query.filter(URL.url_short == short).first_or_404()
-    if url.status is False:
-        if url.check_status_url() is False:
-            flash(f'URL {url.url} não está mais ativa', category='danger')
-            return abort(404)
+    if url.check_status_url() is False:
+        flash(f'URL {url.url} não está mais ativa', category='danger')
+        return abort(404)
     url.hits += 1
     commit()
     return redirect(url.url)
